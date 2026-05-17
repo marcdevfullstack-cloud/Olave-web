@@ -1,9 +1,23 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/(dashboard)/proprietaire/employes/page": "app/(dashboard)/proprietaire/employes/page.js",
-  "/(dashboard)/proprietaire/surveillance/page": "app/(dashboard)/proprietaire/surveillance/page.js",
-  "/(dashboard)/proprietaire/page": "app/(dashboard)/proprietaire/page.js",
-  "/(dashboard)/proprietaire/rapports/page": "app/(dashboard)/proprietaire/rapports/page.js",
+  "/(dashboard)/gerant/laveurs/page": "app/(dashboard)/gerant/laveurs/page.js",
+  "/(dashboard)/gerant/page": "app/(dashboard)/gerant/page.js",
+  "/(dashboard)/gerant/clients/page": "app/(dashboard)/gerant/clients/page.js",
+  "/(dashboard)/gerant/boutique/page": "app/(dashboard)/gerant/boutique/page.js",
+  "/(dashboard)/gerant/historique/page": "app/(dashboard)/gerant/historique/page.js",
+  "/(dashboard)/gerant/transactions/page": "app/(dashboard)/gerant/transactions/page.js",
+  "/(dashboard)/gerant/rapports/page": "app/(dashboard)/gerant/rapports/page.js",
   "/(dashboard)/proprietaire/boutique/page": "app/(dashboard)/proprietaire/boutique/page.js",
-  "/(dashboard)/proprietaire/activite/page": "app/(dashboard)/proprietaire/activite/page.js"
+  "/(dashboard)/proprietaire/abonnement/page": "app/(dashboard)/proprietaire/abonnement/page.js",
+  "/(dashboard)/proprietaire/activite/page": "app/(dashboard)/proprietaire/activite/page.js",
+  "/(dashboard)/proprietaire/rapports/page": "app/(dashboard)/proprietaire/rapports/page.js",
+  "/(dashboard)/proprietaire/employes/page": "app/(dashboard)/proprietaire/employes/page.js",
+  "/(dashboard)/proprietaire/fidelite/page": "app/(dashboard)/proprietaire/fidelite/page.js",
+  "/(dashboard)/proprietaire/gerants/page": "app/(dashboard)/proprietaire/gerants/page.js",
+  "/(dashboard)/proprietaire/salaires/page": "app/(dashboard)/proprietaire/salaires/page.js",
+  "/(dashboard)/proprietaire/page": "app/(dashboard)/proprietaire/page.js",
+  "/(dashboard)/proprietaire/support/page": "app/(dashboard)/proprietaire/support/page.js",
+  "/(dashboard)/proprietaire/stats/page": "app/(dashboard)/proprietaire/stats/page.js",
+  "/(dashboard)/proprietaire/surveillance/page": "app/(dashboard)/proprietaire/surveillance/page.js"
 }
