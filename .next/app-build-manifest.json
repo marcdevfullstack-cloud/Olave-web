@@ -1,0 +1,115 @@
+{
+  "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/(dashboard)/gerant/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/page.js"
+    ],
+    "/(dashboard)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/layout.js"
+    ],
+    "/(dashboard)/gerant/clients/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/clients/page.js"
+    ],
+    "/(dashboard)/gerant/laveurs/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/laveurs/page.js"
+    ],
+    "/(dashboard)/gerant/transactions/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/transactions/page.js"
+    ],
+    "/(dashboard)/gerant/rapports/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/rapports/page.js"
+    ],
+    "/(dashboard)/gerant/historique/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/historique/page.js"
+    ],
+    "/(dashboard)/gerant/boutique/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/gerant/boutique/page.js"
+    ],
+    "/(dashboard)/proprietaire/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/page.js"
+    ],
+    "/(dashboard)/proprietaire/support/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/support/page.js"
+    ],
+    "/(dashboard)/proprietaire/abonnement/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/abonnement/page.js"
+    ],
+    "/(dashboard)/proprietaire/rapports/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/rapports/page.js"
+    ],
+    "/(dashboard)/proprietaire/stats/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/stats/page.js"
+    ],
+    "/(dashboard)/proprietaire/salaires/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/salaires/page.js"
+    ],
+    "/(dashboard)/proprietaire/fidelite/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/fidelite/page.js"
+    ],
+    "/(dashboard)/proprietaire/boutique/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/boutique/page.js"
+    ],
+    "/(dashboard)/proprietaire/surveillance/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/surveillance/page.js"
+    ],
+    "/(dashboard)/proprietaire/activite/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/activite/page.js"
+    ],
+    "/(dashboard)/proprietaire/gerants/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/gerants/page.js"
+    ],
+    "/(dashboard)/proprietaire/employes/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/proprietaire/employes/page.js"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "/page": "app/page.js",
+  "/(dashboard)/proprietaire/employes/page": "app/(dashboard)/proprietaire/employes/page.js",
+  "/(dashboard)/proprietaire/surveillance/page": "app/(dashboard)/proprietaire/surveillance/page.js",
+  "/(dashboard)/proprietaire/page": "app/(dashboard)/proprietaire/page.js",
+  "/(dashboard)/proprietaire/rapports/page": "app/(dashboard)/proprietaire/rapports/page.js",
+  "/(dashboard)/proprietaire/boutique/page": "app/(dashboard)/proprietaire/boutique/page.js",
+  "/(dashboard)/proprietaire/activite/page": "app/(dashboard)/proprietaire/activite/page.js"
+}
