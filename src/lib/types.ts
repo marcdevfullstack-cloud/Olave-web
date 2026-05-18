@@ -116,6 +116,57 @@ export interface DashboardStats {
   laveurs_actifs: number;
 }
 
+export interface LavageFullStats {
+  ca_jour: number;
+  ca_hier: number;
+  ca_mois: number;
+  ca_mois_dernier: number;
+  ca_semaine: number;
+  transactions_jour: number;
+  transactions_mois: number;
+  ticket_moyen: number;
+  clients_total: number;
+  clients_actifs_mois: number;
+  laveurs_actifs: number;
+  types_lavage: Array<{ type_lavage: string; nombre: number; ca: number; pourcentage?: number }>;
+  top_clients: Array<{ id: string; nom_complet: string; nombre_visites: number; total_depense: number }>;
+}
+
+export interface EvolutionPoint {
+  date: string;
+  ca: number;
+  nombre_transactions: number;
+}
+
+export interface ClientDetail {
+  id: string;
+  nom?: string;
+  prenom?: string;
+  nom_complet: string;
+  telephone?: string;
+  type_vehicule: string;
+  immatriculation: string;
+  marque_vehicule?: string;
+  couleur_vehicule?: string;
+  vehicule_info?: string;
+  nombre_visites: number;
+  total_depense: number;
+  dernier_lavage?: string;
+  created_at: string;
+  transactions_recentes: Array<{ id: string; type_lavage: string; montant: number; date: string }>;
+}
+
+export interface ClientLoyalty {
+  points_balance: number;
+  total_points_earned: number;
+  free_washes_available: number;
+  tier: string;
+  tier_name?: string;
+  washes_until_free?: number;
+  next_free_wash_at?: number;
+  loyalty_account_exists?: boolean;
+}
+
 export interface CommissionsJour {
   total_a_payer: number;
   par_laveur: LaveurCommission[];

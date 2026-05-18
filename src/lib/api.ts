@@ -71,6 +71,9 @@ export const endpoints = {
   // Transactions (standalone POST)
   transactionCreate:   '/transactions',
 
+  // Loyalty client
+  clientLoyalty:       (clientId: string) => `/clients/${clientId}/loyalty`,
+
   // Laveurs actions
   laveurToggle:        (id: string) => `/laveurs/${id}/toggle-status`,
 

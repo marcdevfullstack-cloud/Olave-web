@@ -52,6 +52,7 @@ const config: Config = {
       animation: {
         'fade-in': 'fadeIn 0.2s ease-out',
         'slide-in': 'slideIn 0.25s ease-out',
+        'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.4,0,0.2,1)',
         'pulse-slow': 'pulse 3s infinite',
       },
       keyframes: {
@@ -62,6 +63,10 @@ const config: Config = {
         slideIn: {
           from: { opacity: '0', transform: 'translateY(8px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideInRight: {
+          from: { opacity: '0', transform: 'translateX(100%)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
         },
       },
     },
