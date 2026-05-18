@@ -67,6 +67,7 @@ export const endpoints = {
 
   // Salaires
   salaires:            (lavageId: string) => `/lavages/${lavageId}/salaires`,
+  salaireCreate:       '/salaires',
 
   // Transactions (standalone POST)
   transactionCreate:   '/transactions',
@@ -79,4 +80,10 @@ export const endpoints = {
 
   // Ventes
   ventes:              (lavageId: string) => `/lavages/${lavageId}/ventes`,
+
+  // Propriétaire dashboard & gérants
+  statsDashboard:      '/stats/dashboard',
+  statsComparaison:    '/stats/comparaison',
+  gerantRegister:      '/auth/register-gerant',
+  lavageToggle:        (id: string) => `/lavages/${id}/toggle-status`,
 };

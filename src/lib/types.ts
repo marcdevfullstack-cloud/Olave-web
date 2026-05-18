@@ -12,8 +12,73 @@ export interface Lavage {
   id: string;
   nom: string;
   adresse?: string;
-  proprietaire_id: string;
+  ville?: string;
+  commune?: string;
+  telephone?: string;
+  proprietaire_id?: string;
   is_active: boolean;
+  nombre_clients?: number;
+  nombre_laveurs?: number;
+  nombre_gerants?: number;
+  chiffre_affaires_mois?: number;
+  created_at?: string;
+}
+
+export interface Gerant {
+  id: string;
+  nom: string;
+  prenom: string;
+  nom_complet?: string;
+  email?: string;
+  telephone?: string;
+  is_active: boolean;
+  lavage_id?: string;
+  lavage?: { id: string; nom: string };
+  created_at?: string;
+}
+
+export interface Salaire {
+  id: string;
+  employe: { id: string; nom_complet: string; type: 'gerant' | 'laveur' };
+  lavage?: { id: string; nom: string };
+  montant: number;
+  montant_formate: string;
+  date_paiement: string;
+  periode: string;
+  observation?: string;
+  paye_par: string;
+  created_at: string;
+}
+
+export interface ProprietaireDashboardStats {
+  nombre_lavages: number;
+  nombre_lavages_actifs: number;
+  nombre_total_clients: number;
+  nombre_total_laveurs: number;
+  nombre_total_gerants: number;
+  ca_jour: number;
+  ca_semaine: number;
+  ca_mois: number;
+  ca_total: number;
+  transactions_jour: number;
+  transactions_semaine: number;
+  transactions_mois: number;
+  salaires_mois: number;
+  salaires_gerants_mois: number;
+  salaires_laveurs_mois: number;
+  lavage_plus_performant: { id: string; nom: string; ca_mois: number } | null;
+  evolution_ca: { mois_actuel: number; mois_dernier: number; pourcentage: number; tendance: string };
+}
+
+export interface LavageComparaison {
+  id: string;
+  nom: string;
+  ville?: string;
+  ca_mois: number;
+  transactions_mois: number;
+  clients_actifs_mois: number;
+  nombre_laveurs: number;
+  ticket_moyen: number;
 }
 
 export interface LavageStats {

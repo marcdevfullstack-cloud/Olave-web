@@ -56,11 +56,12 @@ export default function ActivitePage() {
   useEffect(() => { if (selectedLavage) load(); }, [load, selectedLavage]);
 
   const typeColors: Record<string, string> = {
-    'intérieur': 'bg-info/10 text-info',
-    'interieur':  'bg-info/10 text-info',
-    'extérieur':  'bg-green/10 text-green-dark',
-    'exterieur':  'bg-green/10 text-green-dark',
-    'complet':    'bg-primary/10 text-primary',
+    'lavage simple':       'bg-green/10 text-green-dark',
+    'lavage complet':      'bg-info/10 text-info',
+    'lavage premium':      'bg-primary/10 text-primary',
+    'nettoyage intérieur': 'bg-navy/10 text-navy',
+    'cirage':              'bg-warning/10 text-warning',
+    'polissage':           'bg-error/10 text-error',
   };
 
   const currentLavage = lavages.find((l) => l.id === selectedLavage);
