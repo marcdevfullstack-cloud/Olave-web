@@ -11,7 +11,14 @@ import type { Client, Laveur } from '@/lib/types';
 import { Users, Search, Plus, Star, Loader2, Car, Receipt } from 'lucide-react';
 
 const TYPES = ['Voiture', 'Moto', 'Camion', 'Bus', 'Tricycle', 'Autre'];
-const TYPE_OPTIONS = ['Extérieur', 'Intérieur', 'Complet'];
+const TYPE_OPTIONS = [
+  'Lavage Simple',
+  'Lavage Complet',
+  'Lavage Premium',
+  'Nettoyage Intérieur',
+  'Cirage',
+  'Polissage',
+];
 
 export default function ClientsPage() {
   const { user } = useAuth();
@@ -83,7 +90,7 @@ export default function ClientsPage() {
 
   async function openTxModal(client: Client) {
     setTxClient(client);
-    setTxForm({ type_lavage: 'Extérieur', montant: '', laveur_id: '', notes: '' });
+    setTxForm({ type_lavage: 'Lavage Simple', montant: '', laveur_id: '', notes: '' });
     setTxError('');
     try {
       const res = await api.get(endpoints.laveurs(lavageId));
@@ -130,16 +137,18 @@ export default function ClientsPage() {
       <div className="p-6 space-y-5">
         {/* Stats rapides */}
         <div className="grid grid-cols-3 gap-4">
-          {[
-            { label: 'Total clients', value: clients.length },
-            { label: 'Avec visites', value: clients.filter((c) => c.nombre_visites > 0).length },
-            { label: 'Nouveaux', value: clients.filter((c) => c.nombre_visites === 0).length },
-          ].map((s) => (
-            <div key={s.label} className="card p-4 text-center">
-              <div className="text-2xl font-bold text-navy">{s.value}</div>
-              <div className="text-xs text-text-secondary mt-1">{s.label}</div>
-            </div>
-          ))}
+          <div className="rounded-2xl p-4 text-center bg-gradient-to-br from-navy/10 to-navy/5 border border-navy/15">
+            <div className="text-2xl font-black text-navy">{clients.length}</div>
+            <div className="text-xs font-medium text-navy/60 mt-1">Total clients</div>
+          </div>
+          <div className="rounded-2xl p-4 text-center bg-gradient-to-br from-green/15 to-green/5 border border-green/20">
+            <div className="text-2xl font-black text-green-dark">{clients.filter((c) => c.nombre_visites > 0).length}</div>
+            <div className="text-xs font-medium text-green-dark/70 mt-1">Avec visites</div>
+          </div>
+          <div className="rounded-2xl p-4 text-center bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20">
+            <div className="text-2xl font-black text-primary">{clients.filter((c) => c.nombre_visites === 0).length}</div>
+            <div className="text-xs font-medium text-primary/70 mt-1">Nouveaux</div>
+          </div>
         </div>
 
         {/* Search + Add */}
@@ -291,13 +300,13 @@ export default function ClientsPage() {
         )}
         <form onSubmit={handleTxSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-navy mb-2">Type de lavage *</label>
-            <div className="flex gap-2">
+            <label className="block text-sm font-semibold text-navy mb-2">Type de service *</label>
+            <div className="grid grid-cols-2 gap-2">
               {TYPE_OPTIONS.map((t) => (
                 <button key={t} type="button"
                   onClick={() => setTxForm((f) => ({ ...f, type_lavage: t }))}
-                  className={cn('flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all',
-                    txForm.type_lavage === t ? 'bg-gradient-primary text-white border-transparent shadow-primary' : 'border-light-grey text-text-secondary hover:border-primary/40'
+                  className={cn('py-2.5 px-3 rounded-xl text-sm font-semibold border transition-all text-left',
+                    txForm.type_lavage === t ? 'bg-gradient-primary text-white border-transparent shadow-primary' : 'border-light-grey text-text-secondary hover:border-primary/40 hover:bg-primary/5'
                   )}>
                   {t}
                 </button>

@@ -67,8 +67,7 @@ export default function BoutiquePage() {
     setVenteError('');
     try {
       await api.post(endpoints.ventes(lavageId), {
-        product_id: venteProduct.id,
-        quantite: venteForm.quantite,
+        items: [{ product_id: venteProduct.id, quantite: venteForm.quantite }],
         client_id: venteForm.client_id || undefined,
       });
       setVenteSuccess(true);

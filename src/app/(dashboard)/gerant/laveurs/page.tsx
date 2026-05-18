@@ -8,7 +8,7 @@ import { LoadingSpinner, EmptyState } from '@/components/ui/LoadingSpinner';
 import api, { endpoints } from '@/lib/api';
 import { formatMontant, cn } from '@/lib/utils';
 import type { Laveur, LaveurCommission } from '@/lib/types';
-import { UserCheck, HandCoins, Plus, Pencil, Trash2, Power, Loader2, AlertTriangle } from 'lucide-react';
+import { UserCheck, HandCoins, Plus, Pencil, Trash2, Power, Loader2, AlertTriangle, Users } from 'lucide-react';
 
 type ModalMode = 'create' | 'edit';
 
@@ -24,7 +24,7 @@ export default function LaveursPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<ModalMode>('create');
   const [editTarget, setEditTarget] = useState<Laveur | null>(null);
-  const [form, setForm] = useState({ nom: '', prenom: '', telephone: '', taux_commission: '10' });
+  const [form, setForm] = useState({ nom: '', prenom: '', telephone: '' });
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
 
@@ -58,7 +58,7 @@ export default function LaveursPage() {
   function openCreate() {
     setModalMode('create');
     setEditTarget(null);
-    setForm({ nom: '', prenom: '', telephone: '', taux_commission: '10' });
+    setForm({ nom: '', prenom: '', telephone: '' });
     setFormError('');
     setModalOpen(true);
   }
@@ -70,7 +70,6 @@ export default function LaveursPage() {
       nom: laveur.nom ?? '',
       prenom: laveur.prenom ?? '',
       telephone: laveur.telephone ?? '',
-      taux_commission: String(laveur.taux_commission),
     });
     setFormError('');
     setModalOpen(true);
@@ -78,17 +77,18 @@ export default function LaveursPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.nom && !form.prenom) { setFormError('Au moins un nom ou prénom requis'); return; }
-    const commission = Number(form.taux_commission);
-    if (isNaN(commission) || commission < 0 || commission > 100) { setFormError('Taux de commission invalide (0–100)'); return; }
+    if (!form.nom.trim()) { setFormError('Le nom est requis'); return; }
+    if (!form.prenom.trim()) { setFormError('Le prénom est requis'); return; }
+    const digits = form.telephone.replace(/\D/g, '');
+    if (digits.length !== 10) { setFormError('Le numéro de téléphone doit contenir exactement 10 chiffres'); return; }
+
     setSubmitting(true);
     setFormError('');
     try {
       const payload = {
-        nom: form.nom || undefined,
-        prenom: form.prenom || undefined,
-        telephone: form.telephone || undefined,
-        taux_commission: commission,
+        nom: form.nom.trim(),
+        prenom: form.prenom.trim(),
+        telephone: digits,
       };
       if (modalMode === 'create') {
         await api.post(endpoints.laveurs(lavageId), payload);
@@ -98,8 +98,8 @@ export default function LaveursPage() {
       setModalOpen(false);
       load();
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setFormError(msg || 'Erreur lors de l\'enregistrement');
+      const e = err as { response?: { data?: { message?: string } } };
+      setFormError(e?.response?.data?.message ?? 'Erreur lors de l\'enregistrement');
     } finally { setSubmitting(false); }
   }
 
@@ -122,35 +122,50 @@ export default function LaveursPage() {
   }
 
   const totalCommissions = commissions.reduce((s, c) => s + c.commission_a_payer, 0);
+  const actifs = laveurs.filter((l) => l.is_active).length;
 
   return (
     <div className="animate-fade-in">
       <Header title="Laveurs" subtitle="Gérant" />
 
       <div className="p-6 space-y-5">
-        {/* Stats */}
+        {/* Stats colorées */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-navy">{laveurs.length}</div>
-            <div className="text-xs text-text-secondary mt-1">Total laveurs</div>
+          <div className="rounded-2xl p-4 bg-gradient-to-br from-navy/10 to-navy/5 border border-navy/15">
+            <div className="flex items-center gap-2 mb-1">
+              <Users size={15} className="text-navy" />
+              <span className="text-xs font-semibold text-navy/70">Total</span>
+            </div>
+            <div className="text-2xl font-black text-navy">{laveurs.length}</div>
           </div>
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-green-dark">{laveurs.filter((l) => l.is_active).length}</div>
-            <div className="text-xs text-text-secondary mt-1">Actifs</div>
+          <div className="rounded-2xl p-4 bg-gradient-to-br from-green/15 to-green/5 border border-green/20">
+            <div className="flex items-center gap-2 mb-1">
+              <UserCheck size={15} className="text-green-dark" />
+              <span className="text-xs font-semibold text-green-dark/80">Actifs</span>
+            </div>
+            <div className="text-2xl font-black text-green-dark">{actifs}</div>
           </div>
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-text-secondary">{laveurs.filter((l) => !l.is_active).length}</div>
-            <div className="text-xs text-text-secondary mt-1">Inactifs</div>
+          <div className="rounded-2xl p-4 bg-gradient-to-br from-surface-variant to-light-grey/50 border border-light-grey">
+            <div className="flex items-center gap-2 mb-1">
+              <Power size={15} className="text-text-secondary" />
+              <span className="text-xs font-semibold text-text-secondary">Inactifs</span>
+            </div>
+            <div className="text-2xl font-black text-text-secondary">{laveurs.length - actifs}</div>
           </div>
-          <div className="card p-4 text-center">
-            <div className="text-xl font-bold text-warning">{formatMontant(totalCommissions)}</div>
-            <div className="text-xs text-text-secondary mt-1">Commissions du jour</div>
+          <div className="rounded-2xl p-4 bg-gradient-to-br from-warning/15 to-warning/5 border border-warning/20">
+            <div className="flex items-center gap-2 mb-1">
+              <HandCoins size={15} className="text-warning" />
+              <span className="text-xs font-semibold text-warning/80">Commissions / jour</span>
+            </div>
+            <div className="text-lg font-black text-warning">{formatMontant(totalCommissions)}</div>
           </div>
         </div>
 
         {/* Header row */}
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-navy">Équipe ({laveurs.length})</h2>
+          <h2 className="font-bold text-navy text-base">
+            Équipe <span className="text-text-secondary font-normal text-sm">({laveurs.length})</span>
+          </h2>
           <button onClick={openCreate} className="btn-primary !py-2 !px-5 !min-w-0 flex items-center gap-2 text-sm">
             <Plus size={16} /> Ajouter un laveur
           </button>
@@ -167,9 +182,9 @@ export default function LaveursPage() {
               {laveurs.map((laveur) => {
                 const comm = commissionFor(laveur.id);
                 return (
-                  <div key={laveur.id} className="flex items-center gap-4 px-5 py-4 hover:bg-surface-variant/50 transition-colors group">
+                  <div key={laveur.id} className="flex items-center gap-4 px-5 py-4 hover:bg-primary/3 transition-colors group">
                     <div className={cn(
-                      'w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0',
+                      'w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm',
                       laveur.is_active ? 'bg-gradient-navy' : 'bg-light-grey'
                     )}>
                       {laveur.initiales}
@@ -180,7 +195,9 @@ export default function LaveursPage() {
                         <span className="font-semibold text-navy">{laveur.nom_complet}</span>
                         <span className={cn(
                           'text-xs font-semibold px-2 py-0.5 rounded-full',
-                          laveur.is_active ? 'bg-green/10 text-green-dark' : 'bg-light-grey text-text-secondary'
+                          laveur.is_active
+                            ? 'bg-green/10 text-green-dark'
+                            : 'bg-light-grey text-text-secondary'
                         )}>
                           {laveur.is_active ? 'Actif' : 'Inactif'}
                         </span>
@@ -189,7 +206,7 @@ export default function LaveursPage() {
                         <div className="text-sm text-text-secondary mt-0.5">{laveur.telephone}</div>
                       )}
                       <div className="text-xs text-text-light mt-0.5">
-                        Commission : <span className="font-semibold text-navy">{laveur.taux_commission}%</span>
+                        Commission : <span className="font-semibold text-primary">20%</span>
                       </div>
                     </div>
 
@@ -208,30 +225,21 @@ export default function LaveursPage() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
-                      <button
-                        onClick={() => openEdit(laveur)}
-                        title="Modifier"
-                        className="p-2 rounded-lg hover:bg-primary/10 hover:text-primary text-text-light transition-colors"
-                      >
+                      <button onClick={() => openEdit(laveur)} title="Modifier"
+                        className="p-2 rounded-lg hover:bg-primary/10 hover:text-primary text-text-light transition-colors">
                         <Pencil size={15} />
                       </button>
-                      <button
-                        onClick={() => handleToggle(laveur)}
+                      <button onClick={() => handleToggle(laveur)}
                         title={laveur.is_active ? 'Désactiver' : 'Activer'}
-                        className={cn(
-                          'p-2 rounded-lg transition-colors',
+                        className={cn('p-2 rounded-lg transition-colors',
                           laveur.is_active
                             ? 'hover:bg-warning/10 hover:text-warning text-text-light'
                             : 'hover:bg-green/10 hover:text-green-dark text-text-light'
-                        )}
-                      >
+                        )}>
                         <Power size={15} />
                       </button>
-                      <button
-                        onClick={() => setDeleteId(laveur.id)}
-                        title="Supprimer"
-                        className="p-2 rounded-lg hover:bg-error/10 hover:text-error text-text-light transition-colors"
-                      >
+                      <button onClick={() => setDeleteId(laveur.id)} title="Supprimer"
+                        className="p-2 rounded-lg hover:bg-error/10 hover:text-error text-text-light transition-colors">
                         <Trash2 size={15} />
                       </button>
                     </div>
@@ -243,50 +251,35 @@ export default function LaveursPage() {
         </div>
       </div>
 
-      {/* Create / Edit Modal */}
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalMode === 'create' ? 'Ajouter un laveur' : 'Modifier le laveur'}
-      >
+      {/* Créer / Modifier Modal */}
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}
+        title={modalMode === 'create' ? 'Ajouter un laveur' : 'Modifier le laveur'}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-navy mb-2">Prénom</label>
-              <input
-                type="text" value={form.prenom}
+              <label className="block text-sm font-semibold text-navy mb-2">Prénom *</label>
+              <input type="text" value={form.prenom}
                 onChange={(e) => setForm((f) => ({ ...f, prenom: e.target.value }))}
-                className="input" placeholder="Jean"
+                className="input" placeholder="Jean" required
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-2">Nom</label>
-              <input
-                type="text" value={form.nom}
+              <label className="block text-sm font-semibold text-navy mb-2">Nom *</label>
+              <input type="text" value={form.nom}
                 onChange={(e) => setForm((f) => ({ ...f, nom: e.target.value }))}
-                className="input" placeholder="Koné"
+                className="input" placeholder="Koné" required
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-navy mb-2">Téléphone</label>
-            <input
-              type="tel" value={form.telephone}
+            <label className="block text-sm font-semibold text-navy mb-2">Téléphone * <span className="text-xs font-normal text-text-light">(10 chiffres)</span></label>
+            <input type="tel" value={form.telephone}
               onChange={(e) => setForm((f) => ({ ...f, telephone: e.target.value }))}
-              className="input" placeholder="0X XX XX XX XX"
+              className="input" placeholder="0712345678" required
             />
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-navy mb-2">
-              Taux de commission (%) *
-            </label>
-            <input
-              type="number" min="0" max="100" step="0.5"
-              value={form.taux_commission}
-              onChange={(e) => setForm((f) => ({ ...f, taux_commission: e.target.value }))}
-              className="input" required
-            />
-            <p className="text-xs text-text-light mt-1">Pourcentage sur chaque lavage effectué</p>
+          <div className="p-3 rounded-xl bg-primary/5 border border-primary/15 text-sm text-text-secondary">
+            Commission appliquée automatiquement : <span className="font-bold text-primary">20%</span> par lavage
           </div>
           {formError && (
             <div className="bg-error/8 border border-error/20 text-error text-sm rounded-xl px-4 py-3">
@@ -294,9 +287,7 @@ export default function LaveursPage() {
             </div>
           )}
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={() => setModalOpen(false)} className="btn-secondary flex-1">
-              Annuler
-            </button>
+            <button type="button" onClick={() => setModalOpen(false)} className="btn-secondary flex-1">Annuler</button>
             <button type="submit" disabled={submitting} className="btn-primary flex-1 flex items-center justify-center gap-2">
               {submitting ? <><Loader2 size={16} className="animate-spin" /> Enregistrement…</> : (modalMode === 'create' ? 'Ajouter' : 'Enregistrer')}
             </button>
@@ -309,19 +300,14 @@ export default function LaveursPage() {
         <div className="space-y-4">
           <div className="flex items-start gap-3 p-4 rounded-xl bg-error/8 border border-error/20">
             <AlertTriangle size={18} className="text-error flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-navy">
+            <p className="text-sm text-navy">
               Cette action est <strong>irréversible</strong>. Les transactions associées seront conservées mais le laveur sera retiré de votre équipe.
-            </div>
+            </p>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => setDeleteId(null)} className="btn-secondary flex-1">
-              Annuler
-            </button>
-            <button
-              onClick={handleDelete}
-              disabled={deleting}
-              className="flex-1 py-3 rounded-xl bg-error text-white font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
-            >
+            <button onClick={() => setDeleteId(null)} className="btn-secondary flex-1">Annuler</button>
+            <button onClick={handleDelete} disabled={deleting}
+              className="flex-1 py-3 rounded-xl bg-error text-white font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50 transition-opacity">
               {deleting ? <><Loader2 size={16} className="animate-spin" /> Suppression…</> : 'Supprimer définitivement'}
             </button>
           </div>
