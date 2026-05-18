@@ -34,6 +34,7 @@ export default api;
 
 export const endpoints = {
   login:               '/auth/login',
+  register:            '/auth/register',
   logout:              '/auth/logout',
   user:                '/auth/user',
   gerants:             '/auth/gerants',

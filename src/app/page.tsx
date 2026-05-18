@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Loader2, Phone } from 'lucide-react';
 import Image from 'next/image';
@@ -186,7 +187,14 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <p className="text-center text-xs text-text-light mt-8 leading-relaxed">
+            <div className="mt-6 text-center">
+              <span className="text-sm text-text-secondary">Pas encore de compte ?{' '}</span>
+              <Link href="/register" className="text-sm font-semibold text-primary hover:underline">
+                Créer un compte
+              </Link>
+            </div>
+
+            <p className="text-center text-xs text-text-light mt-4 leading-relaxed">
               Plateforme réservée aux gérants et propriétaires.<br />
               Contactez votre administrateur pour accéder.
             </p>

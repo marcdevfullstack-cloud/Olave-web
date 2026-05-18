@@ -10,6 +10,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (telephone: string, password: string) => Promise<void>;
+  register: (data: { nom: string; prenom: string; telephone: string; password: string; password_confirmation: string; email?: string }) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -44,6 +45,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(u);
   }, []);
 
+  const register = useCallback(async (data: { nom: string; prenom: string; telephone: string; password: string; password_confirmation: string; email?: string }) => {
+    const cleanTel = data.telephone.replace(/[\s\-\.]/g, '');
+    const res = await api.post(endpoints.register, { ...data, telephone: cleanTel, role: 'proprietaire' });
+    const { token: t, user: u } = res.data.data;
+    localStorage.setItem('olave_token', t);
+    localStorage.setItem('olave_user', JSON.stringify(u));
+    setToken(t);
+    setUser(u);
+  }, []);
+
   const logout = useCallback(async () => {
     try { await api.post(endpoints.logout); } catch { /* ignore */ }
     localStorage.removeItem('olave_token');
@@ -54,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, token, isAuthenticated: !!token && !!user, isLoading, login, logout,
+      user, token, isAuthenticated: !!token && !!user, isLoading, login, register, logout,
     }}>
       {children}
     </AuthContext.Provider>
