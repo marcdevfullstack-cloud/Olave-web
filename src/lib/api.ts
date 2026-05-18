@@ -67,4 +67,13 @@ export const endpoints = {
 
   // Salaires
   salaires:            (lavageId: string) => `/lavages/${lavageId}/salaires`,
+
+  // Transactions (standalone POST)
+  transactionCreate:   '/transactions',
+
+  // Laveurs actions
+  laveurToggle:        (id: string) => `/laveurs/${id}/toggle-status`,
+
+  // Ventes
+  ventes:              (lavageId: string) => `/lavages/${lavageId}/ventes`,
 };

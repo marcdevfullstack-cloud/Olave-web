@@ -89,7 +89,8 @@ export default function TransactionsPage() {
     setSubmitting(true);
     setFormError('');
     try {
-      await api.post(endpoints.transactions(lavageId), {
+      await api.post(endpoints.transactionCreate, {
+        lavage_id: lavageId,
         type_lavage: form.type_lavage,
         montant: Number(form.montant),
         laveur_id: form.laveur_id,
