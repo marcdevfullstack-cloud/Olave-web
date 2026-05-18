@@ -32,6 +32,7 @@ export default function ClientsPage() {
   const lavageId = user?.lavage_id ?? '';
 
   const [clients, setClients] = useState<Client[]>([]);
+  const [loyaltyMap, setLoyaltyMap] = useState<Record<string, { points: number; tier: string }>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
@@ -63,12 +64,26 @@ export default function ClientsPage() {
     if (!lavageId) return;
     setLoading(true);
     try {
-      const res = await api.get(endpoints.clients(lavageId), {
-        params: search ? { search } : {},
-      });
-      if (res.data?.success) {
-        const d = res.data.data;
+      const [clientsRes, loyaltyRes] = await Promise.allSettled([
+        api.get(endpoints.clients(lavageId), { params: search ? { search } : {} }),
+        api.get(endpoints.loyaltyLeaderboard(lavageId), { params: { limit: 200 } }),
+      ]);
+
+      if (clientsRes.status === 'fulfilled' && clientsRes.value.data?.success) {
+        const d = clientsRes.value.data.data;
         setClients(Array.isArray(d) ? d : (d?.data ?? []));
+      }
+
+      if (loyaltyRes.status === 'fulfilled' && loyaltyRes.value.data?.success) {
+        const leaderboard: Array<{ client: { id: string }; points_balance: number; tier: string }> =
+          loyaltyRes.value.data.data ?? [];
+        const map: Record<string, { points: number; tier: string }> = {};
+        leaderboard.forEach((entry) => {
+          if (entry.client?.id) {
+            map[entry.client.id] = { points: entry.points_balance, tier: entry.tier };
+          }
+        });
+        setLoyaltyMap(map);
       }
     } catch { /* ignore */ }
     finally { setLoading(false); }
@@ -238,12 +253,22 @@ export default function ClientsPage() {
                   </div>
 
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-warning font-semibold text-sm">
-                        <Star size={12} fill="currentColor" />
-                        {client.points_fidelite ?? 0} pts
+                    {loyaltyMap[client.id] ? (
+                      <div className="text-right">
+                        <div className="flex items-center gap-1 text-warning font-semibold text-sm">
+                          <Star size={12} fill="currentColor" />
+                          {loyaltyMap[client.id].points} pts
+                        </div>
+                        <div className="text-xs text-text-light capitalize">
+                          {tierConfig[loyaltyMap[client.id].tier]?.icon ?? ''} {tierConfig[loyaltyMap[client.id].tier]?.label ?? loyaltyMap[client.id].tier}
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="text-right">
+                        <div className="text-xs text-text-light">0 pt</div>
+                        <div className="text-xs text-text-light opacity-50">Aucun</div>
+                      </div>
+                    )}
                     <button
                       onClick={(e) => openTxModal(client, e)}
                       title="Créer une transaction"
